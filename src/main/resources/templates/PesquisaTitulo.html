@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:th="http://www.thymeleaf.org"
+		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorator="LayoutPadrao">
+<head>
+	<title>Pesquisa de Título</title>
+</head>
+
+<section layout:fragment="conteudo">
+	<form class="form-horizontal" method="POST" action="/titulos">
+		<div class="alert alert-success alert-dismissible" role="alert" th:if="${!#strings.isEmpty(mensagem)}">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<span th:text="${mensagem}"></span>
+		</div>
+		
+		<div class="panel panel-default">
+
+			<div class="panel-heading">
+				<div class="clearfix">
+					<h1 class="panel-title pull-left">Pesquisa de Título</h1>
+					<a class="btn btn-link pull-right" href="/titulos/novo">Novo Título</a>
+				</div>				
+			</div>
+			
+			<div class="panel-body">
+				
+				<table class="table table-bordered table-striped">
+					<thead>
+						<tr>
+							<th class="text-center col-md-1">#</th>
+							<th>Descrição</th>
+							<th class="text-center col-md-2">Data de Vencimento</th>
+							<th class="text-right col-md-2">Valor</th>
+							<th class="text-center col-md-2">Status</th>
+							<th class="col-md-1"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="titulo : ${titulos}">
+							<td class="text-center" th:text="${titulo.codigo}"></td>
+							<td th:text="${titulo.descricao}"></td>
+							<td class="text-center" th:text="${{titulo.dataVencimento}}"></td>
+							<td class="text-right" th:text="|R$ ${{titulo.valor}}|"></td>
+							<td class="text-center">
+								<span class="label" th:classappend="${titulo.pendente ? 'label-danger' : 'label-success'}" th:text="${titulo.status.descricao}"></span>
+							</td>
+							<td class="text-center">
+							
+							</td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(titulos)}">
+							<td class="text-center" colspan="6" >Nenum Título foi encontrado</td>
+						</tr>
+					</tbody>					
+				</table>
+			</div>
+		</div>
+	</form>	
+</section>
+</html>
