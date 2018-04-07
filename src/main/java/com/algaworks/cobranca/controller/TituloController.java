@@ -2,12 +2,14 @@ package com.algaworks.cobranca.controller;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,6 +22,8 @@ import com.algaworks.cobranca.repository.Titulos;
 @Controller
 @RequestMapping("/titulos")
 public class TituloController {
+	
+	private static final String CADASTRO_VIEW = "CadastroTitulo";
 	
 	@Autowired
 	private Titulos titulos;
@@ -35,7 +39,7 @@ public class TituloController {
 	
 	@RequestMapping(value = "/novo", method = RequestMethod.GET)
 	public ModelAndView cadastrar() {
-		ModelAndView mv = new ModelAndView("CadastroTitulo");
+		ModelAndView mv = new ModelAndView(CADASTRO_VIEW);
 		mv.addObject("titulo", new Titulo());
 		return mv;
 	}
@@ -43,13 +47,20 @@ public class TituloController {
 	@RequestMapping(value = "/novo", method = RequestMethod.POST)
 	public String salvar(@Validated Titulo titulo, Errors errors, RedirectAttributes attributes) {
 		if(errors.hasErrors()) {
-			return "CadastroTitulo";
+			return CADASTRO_VIEW;
 		}
 		
 		titulos.save(titulo);
 		
 		attributes.addFlashAttribute("mensagem", "Título salvo com sucesso!");
 		return "redirect:/titulos/novo";
+	}
+	
+	@RequestMapping("{codigo}")
+	public ModelAndView edicao (@PathVariable("codigo") Titulo titulo) {
+		ModelAndView mv = new ModelAndView(CADASTRO_VIEW);
+		mv.addObject("titulo", titulo);
+		return mv;
 	}
 
 	@ModelAttribute("statusTitulo")
