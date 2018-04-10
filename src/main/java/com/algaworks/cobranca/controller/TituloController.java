@@ -62,6 +62,15 @@ public class TituloController {
 		mv.addObject("titulo", titulo);
 		return mv;
 	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value="{codigo}")
+	public ModelAndView excluir (@PathVariable ("codigo") Titulo titulo, RedirectAttributes attributes) {
+		titulos.delete(titulo);
+		
+		attributes.addFlashAttribute("mensagem", "Título excluído com sucesso!");
+		ModelAndView mv = new ModelAndView("redirect:/titulos");
+		return mv;
+	}
 
 	@ModelAttribute("statusTitulo")
 	public List<StatusTitulo> getStatusTitulo(){

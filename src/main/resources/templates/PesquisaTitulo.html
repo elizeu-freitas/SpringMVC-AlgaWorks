@@ -8,13 +8,8 @@
 </head>
 
 <section layout:fragment="conteudo">
+	<div layout:insert="MensagemGeral"></div>
 	<form class="form-horizontal" method="POST" action="/titulos">
-		<div class="alert alert-success alert-dismissible" role="alert" th:if="${!#strings.isEmpty(mensagem)}">
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-			</button>
-			<span th:text="${mensagem}"></span>
-		</div>
 		
 		<div class="panel panel-default">
 
@@ -51,6 +46,9 @@
 								<a class="btn btn-link btn-xs" th:href="@{/titulos/{codigo}(codigo=${titulo.codigo})}">
 									<span class="glyphicon glyphicon-pencil"></span>
 								</a>
+								<a class="btn btn-link btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModal" th:attr="data-codigo=${titulo.codigo}, data-descricao=${titulo.descricao}">
+									<span class="glyphicon glyphicon-remove"></span>
+								</a>
 							</td>
 						</tr>
 						<tr th:if="${#lists.isEmpty(titulos)}">
@@ -61,5 +59,6 @@
 			</div>
 		</div>
 	</form>	
+	<div layout:insert="DialogoConfirmacaoExclusao"></div>
 </section>
 </html>
